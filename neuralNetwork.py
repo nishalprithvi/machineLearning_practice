@@ -122,3 +122,37 @@ print("\nEvaulating the Model with Test Data : ")
 loss, accuracy = model.evaluate(x_test_norm, y_test_cat)
 print(f'Test Loss : {loss:.4f}')
 print(f"Test Accuracy : {accuracy:.2f}%")
+
+
+# Prediction and Visualize results 
+
+predictions = model.predict(x_test_norm)
+
+def show_predictions(index):
+    plt.figure(figsize=(6,3))
+    plt.subplot(1,2,1)
+    plt.imshow(x_test[index], cmap=plt.cm.binary)
+    plt.xticks([])
+    plt.yticks([])
+
+    predicted_label = np.argmax(predictions[index])
+    true_label = y_test[index]
+
+    color = 'green' if predicted_label == true_label else 'red'
+    plt.xlabel(f"Predicted: {predicted_label}\nTrue: {true_label}", color=color)
+
+    # Plot the prediction probabilities
+    plt.subplot(1, 2, 2)
+    plt.grid(False)
+    plt.xticks(range(10))
+    plt.yticks([])
+    bar_plot = plt.bar(range(10), predictions[index], color="#777777")
+    bar_plot[predicted_label].set_color('red')
+    bar_plot[true_label].set_color('green')
+    plt.ylim([0, 1])
+    plt.xlabel("Probability Distribution")
+    plt.show()
+
+# Show predictions for a few images
+for i in range(5):
+    show_predictions(i)
